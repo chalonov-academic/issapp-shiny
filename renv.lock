@@ -1786,7 +1786,7 @@
     },
     "terra": {
       "Package": "terra",
-      "Version": "1.7-78",
+      "Version": "1.7-80",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1794,7 +1794,7 @@
         "Rcpp",
         "methods"
       ],
-      "Hash": "8f020def0792119cb98bd8f696dab22d"
+      "Hash": "0b221b6642a4ff6716bc65626e252ada"
     },
     "textshaping": {
       "Package": "textshaping",
