@@ -1,0 +1,14 @@
+Package: 	issapp-shiny
+Title: ISSAPP
+Version: 0.1.0
+Authors@R: person("Your", "Name", email = "your.email@example.com", role = c("aut", "cre"))
+Description: A brief description of what your Shiny app does.
+Depends: R (>= 3.5.0)
+Imports: 
+    shiny,
+    terra,
+    other_package_1,
+    other_package_2
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
