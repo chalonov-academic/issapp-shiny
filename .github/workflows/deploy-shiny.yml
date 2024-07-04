@@ -1,0 +1,40 @@
+name: Deploy Shiny App
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    container: rocker/geospatial:latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install system dependencies
+      run: |
+        apt-get update && apt-get install -y --no-install-recommends \
+        libcurl4-openssl-dev \
+        libssl-dev \
+        libxml2-dev
+
+    - name: Install R packages
+      run: |
+        R -e 'install.packages(c("remotes", "shiny", "rsconnect"))'
+        R -e 'remotes::install_cran("terra", INSTALL_opts = c("--with-keep-source"))'
+        R -e 'remotes::install_deps(dependencies = TRUE)'
+
+    - name: Build Shiny app
+      run: R -e 'shiny::runApp(appDir = ".", port = 3838)'
+
+    - name: Deploy to shinyapps.io
+      env:
+        SHINYAPPS_ACCOUNT: ${{ secrets.SHINYAPPS_ACCOUNT }}
+        SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
+        SHINYAPPS_SECRET: ${{ secrets.SHINYAPPS_SECRET }}
+      run: |
+        R -e 'rsconnect::setAccountInfo(name="${{ secrets.SHINYAPPS_ACCOUNT }}", token="${{ secrets.SHINYAPPS_TOKEN }}", secret="${{ secrets.SHINYAPPS_SECRET }}")'
+        R -e 'rsconnect::deployApp(appDir = ".", appName = "	issapp-shiny", account = "${{ secrets.SHINYAPPS_ACCOUNT }}", server = "shinyapps.io")'
